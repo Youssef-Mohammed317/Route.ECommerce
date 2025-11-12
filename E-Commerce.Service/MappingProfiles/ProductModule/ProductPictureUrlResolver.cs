@@ -1,0 +1,44 @@
+﻿using AutoMapper;
+using AutoMapper.Execution;
+using E_Commerce.Domian.Entites.ProductModule;
+using E_Commerce.Shared.DTOs.ProductDTOs;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace E_Commerce.Service.Implementation.MappingProfiles.ProductModule
+{
+    public class ProductPictureUrlResolver : IValueResolver<Product, ProductDTO, string>
+    {
+        private readonly IConfiguration _configuration;
+
+        public ProductPictureUrlResolver(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+        public string Resolve(Product source, ProductDTO destination, string destMember, ResolutionContext context)
+        {
+            if (string.IsNullOrEmpty(source.PictureUrl))
+            {
+                return string.Empty;
+            }
+            if (source.PictureUrl.StartsWith("http"))
+            {
+                return source.PictureUrl;
+            }
+            var baseUrl = _configuration.GetSection("URLs")["BaseUrl"];
+
+            if (string.IsNullOrEmpty(baseUrl))
+            {
+                return string.Empty;
+            }
+
+            var url = $"{baseUrl}{source.PictureUrl}";
+
+            return url;
+        }
+    }
+}

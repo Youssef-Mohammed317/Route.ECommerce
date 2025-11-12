@@ -1,15 +1,18 @@
 
 using E_Commerce.Domian.Interfaces;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.Data.Migrations;
 using E_Commerce.Persistence.Data.SeedData;
+using E_Commerce.Persistence.Repositories;
 using E_Commerce.Presentation.Api.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace E_Commerce.Presentation.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,9 @@ namespace E_Commerce.Presentation.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
+            #region IoC
+
             #region Database
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
@@ -27,9 +33,14 @@ namespace E_Commerce.Presentation.Api
             });
             #endregion
 
-            #region IoC
-
+            #region Services
             builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(config =>
+            {
+                config.AddMaps(typeof(ProductModuleTables).Assembly);
+            });
+            #endregion
 
             #endregion
 
@@ -37,10 +48,10 @@ namespace E_Commerce.Presentation.Api
 
             var app = builder.Build();
 
-            #region Data-Seed ApplyMigrations
+            #region Data-Seed & Apply Migrations
 
-            app.MigrateDatabase();
-            app.SeedData();
+            await app.MigrateDatabaseAsync();
+            await app.SeedDataAsync();
 
             #endregion
 

@@ -6,7 +6,8 @@
     <Project Path="E-Commerce.Persistence/E-Commerce.Persistence.csproj" />
   </Folder>
   <Folder Name="/Presentation/">
-    <Project Path="E-Commerce.Presentation.Api/E-Commerce.Presentation.Api.csproj" />
+    <Project Path="E-Commerce.Api/E-Commerce.Api.csproj" />
+    <Project Path="E-Commerce.Presentation/E-Commerce.Presentation.csproj" />
   </Folder>
   <Folder Name="/Service/">
     <Project Path="E-Commerce.Service.Abstraction/E-Commerce.Service.Abstraction.csproj" />

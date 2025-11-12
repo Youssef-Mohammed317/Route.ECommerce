@@ -25,9 +25,9 @@ namespace E_Commerce.Persistence.Data.SeedData
         {
             try
             {
-                var hasProducts = _dbContext.Products.Any();
-                var hasProductBrands = _dbContext.ProductBrands.Any();
-                var hasProductTypes = _dbContext.ProductTypes.Any();
+                var hasProducts = await _dbContext.Products.AnyAsync();
+                var hasProductBrands = await _dbContext.ProductBrands.AnyAsync();
+                var hasProductTypes = await _dbContext.ProductTypes.AnyAsync();
 
 
                 if (hasProducts && hasProductBrands && hasProductTypes) return;
@@ -36,16 +36,16 @@ namespace E_Commerce.Persistence.Data.SeedData
 
                 if (!hasProductBrands)
                 {
-                    await SeedDataFromJson(Path.Combine(basePath, "brands.json"), _dbContext.ProductBrands);
+                    await SeedDataFromJsonAsync(Path.Combine(basePath, "brands.json"), _dbContext.ProductBrands);
                 }
                 if (!hasProductTypes)
                 {
-                    await SeedDataFromJson(Path.Combine(basePath, "types.json"), _dbContext.ProductTypes);
+                    await SeedDataFromJsonAsync(Path.Combine(basePath, "types.json"), _dbContext.ProductTypes);
                 }
                 await _dbContext.SaveChangesAsync();
                 if (!hasProducts)
                 {
-                    await SeedDataFromJson(Path.Combine(basePath, "products.json"), _dbContext.Products);
+                    await SeedDataFromJsonAsync(Path.Combine(basePath, "products.json"), _dbContext.Products);
                 }
                 await _dbContext.SaveChangesAsync();
 
@@ -55,7 +55,7 @@ namespace E_Commerce.Persistence.Data.SeedData
                 Console.WriteLine(ex.Message);
             }
         }
-        private async Task SeedDataFromJson<TEnitiy>(string filePath, DbSet<TEnitiy> entity) where TEnitiy : BaseEntity
+        private async Task SeedDataFromJsonAsync<TEnitiy>(string filePath, DbSet<TEnitiy> entity) where TEnitiy : BaseEntity
         {
             if (!File.Exists(filePath)) throw new FileNotFoundException();
 

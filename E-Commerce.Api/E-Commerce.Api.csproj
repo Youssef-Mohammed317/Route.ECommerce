@@ -8,7 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.22">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\E-Commerce.Persistence\E-Commerce.Persistence.csproj" />
+    <ProjectReference Include="..\E-Commerce.Presentation\E-Commerce.Presentation.csproj" />
+    <ProjectReference Include="..\E-Commerce.Service.Abstraction\E-Commerce.Service.Abstraction.csproj" />
+    <ProjectReference Include="..\E-Commerce.Service\E-Commerce.Service.Implementation.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,27 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_Commerce.Domian.Entites.ProductModule
+namespace E_Commerce.Shared.DTOs.ProductDTOs
 {
-    public class Product : BaseEntity
+    public class ProductDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public decimal Price { get; set; }
         public string PictureUrl { get; set; } = null!;
         public string PictureName { get; set; } = null!;
-
-        #region Relations
-        [ForeignKey(nameof(ProductBrand))]
         public Guid ProductBrandId { get; set; }
-
-        public virtual ProductBrand ProductBrand { get; set; } = null!;
-
-
-        [ForeignKey(nameof(ProductType))]
+        public string ProductBrand { get; set; } = null!;
         public Guid ProductTypeId { get; set; }
+        public string ProductType { get; set; } = null!;
 
-        public virtual ProductType ProductType { get; set; } = null!;
-        #endregion
     }
 }
