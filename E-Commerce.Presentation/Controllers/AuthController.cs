@@ -1,7 +1,9 @@
 ﻿using E_Commerce.Service.Abstraction.Interfaces;
 using E_Commerce.Shared.Common;
 using E_Commerce.Shared.DTOs.AuthDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace E_Commerce.Presentation.Controllers
@@ -38,5 +40,25 @@ namespace E_Commerce.Presentation.Controllers
             // on failure, service returns Validation/Failure errors
             return FromResult(result);
         }
+        [HttpGet("currentUser")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (email == null)
+            {
+                return Unauthorized();
+            }
+            var result = await _authService.GetUserByEmail(email);
+            return FromResult(result);
+        }
+        [HttpGet("emailExists")]
+        public async Task<IActionResult> CheckEmailExists([FromQuery] string email)
+        {
+            var result = await _authService.CheckEmailExist(email);
+            return FromResult(result);
+        }
+
     }
 }

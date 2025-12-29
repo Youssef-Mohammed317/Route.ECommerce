@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Presentation.Attributes;
 using E_Commerce.Service.Abstraction.Interfaces;
 using E_Commerce.Shared.DTOs.ProductDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace E_Commerce.Presentation.Controllers
         }
         [HttpGet]
         [RedisCache(15)]
+        [Authorize]
         public async Task<IActionResult> GetAllProducts([FromQuery] ProductQueryParams productQueryParams)
         {
             var products = await _productService.GetAllProductsAsync(productQueryParams);

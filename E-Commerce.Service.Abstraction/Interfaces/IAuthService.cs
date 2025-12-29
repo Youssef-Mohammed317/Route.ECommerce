@@ -10,6 +10,8 @@ namespace E_Commerce.Service.Abstraction.Interfaces
 {
     public interface IAuthService
     {
+        Task<Result<bool>> CheckEmailExist(string email);
+        Task<Result<UserDTO>> GetUserByEmail(string email);
         Task<Result<UserDTO>> LoginAsync(LoginDTO loginDTO);
         Task<Result<UserDTO>> RegisterAsync(RegisterDTO registerDTO);
     }

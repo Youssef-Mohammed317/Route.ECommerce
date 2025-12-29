@@ -3,9 +3,14 @@ using E_Commerce.Service.Abstraction.Interfaces;
 using E_Commerce.Shared.Common;
 using E_Commerce.Shared.DTOs.AuthDTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +19,12 @@ namespace E_Commerce.Service.Implementation.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<ApplicationUser> userManager)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            this._configuration = configuration;
         }
         public async Task<Result<UserDTO>> LoginAsync(LoginDTO loginDTO)
         {
@@ -66,9 +73,60 @@ namespace E_Commerce.Service.Implementation.Services
             return Result<UserDTO>.Fail(errors);
 
         }
+
+        public async Task<Result<bool>> CheckEmailExist(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+
+            {
+                return Result<bool>.Ok(false);
+            }
+            return Result<bool>.Ok(true);
+        }
+        public async Task<Result<UserDTO>> GetUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return Result<UserDTO>.Fail(Error.NotFound("User not found"));
+            }
+            var userDTO = new UserDTO
+            {
+                Email = user.Email!,
+                DisplayName = user.DisplayName,
+                Token = await GenterateTokenAsync(user)
+            };
+            return Result<UserDTO>.Ok(userDTO);
+        }
+
         private async Task<string> GenterateTokenAsync(ApplicationUser user)
         {
-            return "Token"; // Implement token generation logic here
+            var claims = new List<Claim>
+               {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+               };
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTOptions:SecretKey"]!));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: _configuration["JWTOptions:Issuer"],
+                audience: _configuration["JWTOptions:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials
+            );
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            return tokenHandler.WriteToken(tokenDescriptor);
         }
     }
 }

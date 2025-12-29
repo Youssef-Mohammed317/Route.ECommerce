@@ -13,6 +13,7 @@ using E_Commerce.Presentation.Api.Extensions;
 using E_Commerce.Service.Abstraction.Interfaces;
 using E_Commerce.Service.Implementation.MappingProfiles.ProductModule;
 using E_Commerce.Service.Implementation.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -97,6 +98,32 @@ namespace E_Commerce.Presentation.Api
 
             #endregion
 
+            #region Jwt token
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["JWTOptions:Issuer"],
+                    ValidAudience = builder.Configuration["JWTOptions:Audience"],
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWTOptions:SecretKey"]!)),
+                    ClockSkew = System.TimeSpan.Zero
+                };
+
+            });
+
+            #endregion
+
 
 
             var app = builder.Build();
@@ -121,6 +148,8 @@ namespace E_Commerce.Presentation.Api
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
