@@ -1,39 +1,40 @@
-Route E-Commerce API Project
+# Route E-Commerce API Project
 
-This is a robust E-Commerce API built with a clean architecture following the Onion Architecture pattern with 7 layers:
+A robust **E-Commerce REST API** built with a clean architecture following the **Onion Architecture** pattern (**7 layers**).  
+This project demonstrates a professional approach to building scalable, maintainable, and secure backend systems using modern .NET practices.
 
-Domain: Entities and repository interfaces
+🎥 **Video (API Endpoints + Angular Testing):** https://drive.google.com/file/d/1l2i7VBHb2nSRPGbqnWYJm_NIqfqFp3Zf/view?usp=drive_link  
+📜 **Certificate:** https://drive.google.com/file/d/19RqIrDpleaDBigK_zqCGFvM50ogRDtXL/view?usp=drive_link  
 
-Persistence: Data layer with EF Core and two separate Identity contexts
+---
 
-API: Main project hosting endpoints
+## 🏗 Architecture (Onion Architecture – 7 Layers)
 
-Presentation: Controllers
+- **Domain:** Entities and repository interfaces  
+- **Persistence:** Data layer with EF Core and **two separate Identity contexts**  
+- **API:** Main project hosting endpoints  
+- **Presentation:** Controllers  
+- **Service Abstraction:** Service interfaces  
+- **Service Implementation:** Service implementations, mappings, exception specifications  
+- **Shared:** DTOs and **Result Pattern**
 
-Service Abstraction: Service interfaces
+---
 
-Service Implementation: Service implementations, mappings, exception specifications
+## ✅ Key Features & Technologies
 
-Shared: DTOs and Result Pattern
+- **Entity Framework Core** for database interactions
+- **Redis** for Basket (Cart) entity
+- **Repository + Unit of Work** patterns (Generic Repository implementation)
+- Dedicated **service layer** for Identity context
+- **Specification Pattern** for flexible querying
+- **Global Exception Handling**, later refactored into a consistent **Result Pattern**
+- **JWT Authentication** for secure access
+- **Stripe Integration** for card payments
+- Fully tested with an **Angular front-end**  
+  *(Video includes both the API endpoints and the Angular project testing flow)*
 
-Key features and technologies:
+---
 
-Entity Framework Core for database interactions
+## 🎯 Project Goal
 
-Redis For Basket Entity
-
-Repository & Unit of Work patterns with Generic Repository implementation
-
-Service layer dedicated to Identity context
-
-Specification Design Pattern for flexible querying
-
-Global Exception Handling, later refactored to Result Pattern
-
-JWT Authentication for secure access
-
-Stripe Integration for card payments
-
-Fully tested with an Angular front-end (There is a video for the end points and angular project)
-
-This project demonstrates a professional approach to building scalable, maintainable, and secure backend systems with modern .NET practices.
+Build a scalable and maintainable E-Commerce backend using clean architecture principles, strong separation of concerns, secure authentication, and production-style integrations (Redis, Stripe, Specifications, Result Pattern).
