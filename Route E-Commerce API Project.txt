@@ -1,0 +1,39 @@
+Route E-Commerce API Project
+
+This is a robust E-Commerce API built with a clean architecture following the Onion Architecture pattern with 7 layers:
+
+Domain: Entities and repository interfaces
+
+Persistence: Data layer with EF Core and two separate Identity contexts
+
+API: Main project hosting endpoints
+
+Presentation: Controllers
+
+Service Abstraction: Service interfaces
+
+Service Implementation: Service implementations, mappings, exception specifications
+
+Shared: DTOs and Result Pattern
+
+Key features and technologies:
+
+Entity Framework Core for database interactions
+
+Redis for Basket Entity
+
+Repository & Unit of Work patterns with Generic Repository implementation
+
+Service layer dedicated to Identity context
+
+Specification Design Pattern for flexible querying
+
+Global Exception Handling, later refactored to Result Pattern
+
+JWT Authentication for secure access
+
+Stripe Integration for card payments
+
+Fully tested with an Angular front-end
+
+This project demonstrates a professional approach to building scalable, maintainable, and secure backend systems with modern .NET practices.
